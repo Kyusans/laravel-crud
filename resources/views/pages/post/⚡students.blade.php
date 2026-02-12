@@ -16,8 +16,6 @@ new class extends Component {
   public string $age = '';
   public string $sex = '';
 
-  public bool $isEdit = false;
-
   public function setStudent($id, $student_id, $name, $section, $email, $age, $sex)
   {
     $this->id = $id;
@@ -28,9 +26,10 @@ new class extends Component {
     $this->age = $age;
     $this->sex = $sex;
   }
-
   public string $search = "";
   public $students = [];
+  public bool $isEdit = false;
+
 
   public function render()
   {
@@ -47,7 +46,7 @@ new class extends Component {
       "student_id" => "required",
       "name" => "required",
       "section" => "required",
-      "email" => "required|email|" . ($this->isEdit ? "unique:students,email," . $this->id : "unique:students,email"),
+      "email" => "required|email|" . ($this->isEdit ? "" : "unique:students,email"),
       "age" => "required|numeric",
       "sex" => "required"
     ]);
@@ -64,7 +63,7 @@ new class extends Component {
       ]
     );
 
-    session()->flash('success', 'Post created successfully.');
+    session()->flash('success', 'Student ' . ($this->isEdit ? "updated" : "created") . ' successfully.');
     $this->reset();
     $this->isEdit = false;
     // dd($this->title, $this->content);
@@ -74,6 +73,7 @@ new class extends Component {
   {
     $post = Student::find($id);
     $post->delete();
+    session()->flash('success', 'Student deleted successfully.');
   }
 
   public function handleEditStudent($data)
@@ -93,6 +93,13 @@ new class extends Component {
 ?>
 
 <div class="container mt-3">
+  @if (session("success"))
+    <div class="alert alert-success alert-dismissible fade show">
+      {{ session("success") }}
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+  @endif
+
   <form wire:submit="save" class="card" style="width: 18rem;">
     <div class="card-body">
       <div class="form-floating mb-3">
