@@ -9,3 +9,5 @@ Route::get("/student/get", [StudentController::class, "getStudent"])->name("stud
 Route::get("/student/edit/{id}", [StudentController::class, "edit"])->name("student.edit");
 Route::post("/student/update/{id}", [StudentController::class, "updateStudent"])->name("student.update");
 Route::post("/student/delete/{id}", [StudentController::class, "deleteStudent"])->name("student.delete");
+
+Route::livewire("/post/create", "pages::post.students");
